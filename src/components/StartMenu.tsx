@@ -51,6 +51,7 @@ interface StartMenuProps {
   settings: CareerSettings;
   onUpdateSettings: (s: CareerSettings) => void;
   onStartCareer: (career: CareerState) => void;
+  onNavigateAbout?: () => void;
   latestCareerSummary: SavedCareerSummary | null;
 }
 
@@ -97,6 +98,7 @@ export const StartMenu: React.FC<StartMenuProps> = ({
   settings,
   onUpdateSettings,
   onStartCareer,
+  onNavigateAbout,
   latestCareerSummary,
 }) => {
   const [screen, setScreen] = useState<MenuScreen>('home');
@@ -538,6 +540,21 @@ export const StartMenu: React.FC<StartMenuProps> = ({
                     eventos aleatórios do paddock e o histórico completo da sua carreira em um jogo de Fórmula 1 contínuo.
                   </p>
                 </article>
+              </div>
+              <div className="pt-2 flex flex-wrap items-center justify-between gap-3">
+                <a
+                  href="/sobre-o-jogo"
+                  onClick={(e) => {
+                    if (onNavigateAbout) {
+                      e.preventDefault();
+                      onNavigateAbout();
+                    }
+                  }}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 transition-colors"
+                >
+                  <span>Saiba mais sobre o Apex Grid (/sobre-o-jogo)</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </a>
               </div>
             </section>
           </div>

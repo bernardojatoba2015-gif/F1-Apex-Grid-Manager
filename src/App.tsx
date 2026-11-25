@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ShieldAlert } from 'lucide-react';
+import { AboutGamePage } from './components/AboutGamePage';
 import { GameLayout } from './components/GameLayout';
 import { RaceResultModal } from './components/modals/RaceResultModal';
 import { SeasonEndModal } from './components/modals/SeasonEndModal';
@@ -47,10 +48,18 @@ import {
   SponsorContract,
 } from './types/game';
 
+function normalizeRoutePath(pathname: string): string {
+  const trimmed = pathname.replace(/\/+$/, '');
+  return trimmed === '' ? '/' : trimmed;
+}
+
 export function App() {
   const [settings, setSettings] = useState<CareerSettings>(() => loadGlobalSettings());
   const [career, setCareer] = useState<CareerState | null>(null);
   const [activeTab, setActiveTab] = useState<NavTab>('overview');
+  const [currentPath, setCurrentPath] = useState<string>(() =>
+    normalizeRoutePath(window.location.pathname)
+  );
   const [latestSummary, setLatestSummary] = useState<SavedCareerSummary | null>(
     () => getSavedCareerSummaries()[0] ?? null
   );
@@ -58,9 +67,36 @@ export function App() {
   const [raceModalData, setRaceModalData] = useState<RaceWeekend | null>(null);
   const [seasonEndSummary, setSeasonEndSummary] = useState<SeasonHistoryEntry | null>(null);
 
-  // Dynamic canonical and OpenGraph URL resolution for SEO
+  const navigateTo = (path: string) => {
+    const normalized = normalizeRoutePath(path);
+    if (normalizeRoutePath(window.location.pathname) !== normalized) {
+      window.history.pushState({}, '', normalized);
+    }
+    setCurrentPath(normalized);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   useEffect(() => {
-    const canonicalUrl = window.location.origin + window.location.pathname;
+    const handlePopState = () => {
+      setCurrentPath(normalizeRoutePath(window.location.pathname));
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // Dynamic canonical, page title, description, and OpenGraph URL resolution for SEO
+  useEffect(() => {
+    const isAboutPage = !career && currentPath === '/sobre-o-jogo';
+    const pageTitle = isAboutPage
+      ? 'Apex Grid F1 Team Manager | Simulador de F1 Online'
+      : 'Apex Grid F1 Team Manager | Jogo Online';
+    const pageDescription = isAboutPage
+      ? 'Descubra como funciona o Apex Grid F1 Team Manager, um simulador de F1 online para gerenciar escuderias, contratar pilotos, desenvolver carros e disputar campeonatos de 24 GPs.'
+      : 'Conheça o Apex Grid F1 Team Manager, um jogo online de gerenciamento de Fórmula 1. Monte sua escuderia, contrate pilotos, desenvolva carros e dispute campeonatos.';
+
+    document.title = pageTitle;
+
+    const canonicalUrl = window.location.origin + (isAboutPage ? '/sobre-o-jogo' : '/');
     let canonicalLink = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (!canonicalLink) {
       canonicalLink = document.createElement('link');
@@ -80,10 +116,15 @@ export function App() {
     };
 
     const ogImageUrl = `${window.location.origin}/og-cover.jpg`;
+    setMeta('meta[name="description"]', 'name', 'description', pageDescription);
+    setMeta('meta[property="og:title"]', 'property', 'og:title', pageTitle);
+    setMeta('meta[property="og:description"]', 'property', 'og:description', pageDescription);
     setMeta('meta[property="og:url"]', 'property', 'og:url', canonicalUrl);
     setMeta('meta[property="og:image"]', 'property', 'og:image', ogImageUrl);
+    setMeta('meta[name="twitter:title"]', 'name', 'twitter:title', pageTitle);
+    setMeta('meta[name="twitter:description"]', 'name', 'twitter:description', pageDescription);
     setMeta('meta[name="twitter:image"]', 'name', 'twitter:image', ogImageUrl);
-  }, []);
+  }, [career, currentPath]);
 
   // Auto-save whenever career updates
   useEffect(() => {
@@ -413,11 +454,21 @@ export function App() {
   };
 
   if (!career) {
+    if (currentPath === '/sobre-o-jogo') {
+      return (
+        <AboutGamePage
+          onPlayNow={() => navigateTo('/')}
+          onGoHome={() => navigateTo('/')}
+        />
+      );
+    }
+
     return (
       <StartMenu
         settings={settings}
         onUpdateSettings={(s) => setSettings(s)}
         onStartCareer={handleStartCareer}
+        onNavigateAbout={() => navigateTo('/sobre-o-jogo')}
         latestCareerSummary={latestSummary}
       />
     );
