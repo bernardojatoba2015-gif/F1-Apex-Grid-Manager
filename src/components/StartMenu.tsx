@@ -352,120 +352,194 @@ export const StartMenu: React.FC<StartMenuProps> = ({
             Apex Grid Manager
           </span>
         </div>
-        {screen !== 'home' && (
-          <button
-            onClick={() => setScreen('home')}
-            className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-medium text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 transition-colors cursor-pointer"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Voltar ao Menu
-          </button>
-        )}
+        <div className="flex items-center gap-4">
+          <span className="font-display text-xs sm:text-sm font-medium tracking-wider text-white/35 select-none whitespace-nowrap">
+            creator: Bernardo Jatobá
+          </span>
+          {screen !== 'home' && (
+            <button
+              onClick={() => setScreen('home')}
+              className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-medium text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Voltar ao Menu
+            </button>
+          )}
+        </div>
       </header>
 
       <main className="relative z-10 flex-1 flex items-center justify-center p-5 lg:p-10">
         {screen === 'home' && (
-          <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7 space-y-6">
-              <div className="space-y-3">
-                <p className="text-xs font-medium text-slate-400 tracking-wide">
-                  Simulador de Gerenciamento de Fórmula 1 · Temporadas 2025 e 2026
-                </p>
-                <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.06] text-balance">
-                  Comande sua escuderia do pit wall ao título mundial
-                </h1>
-                <p className="text-slate-300 text-base leading-relaxed max-w-xl">
-                  Gerencie pilotos, contratos, diretoria, finanças, patrocinadores e desenvolvimento do carro.
-                  Simule GPs completos de forma automática e construa uma dinastia ao longo de várias temporadas.
-                </p>
-              </div>
+          <div className="w-full max-w-5xl space-y-14 py-2">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              <div className="lg:col-span-7 space-y-6">
+                <div className="space-y-3">
+                  <p className="text-xs font-medium text-slate-400 tracking-wide">
+                    Simulador de Gerenciamento de Fórmula 1 · Temporadas 2025 e 2026
+                  </p>
+                  <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.06] text-balance">
+                    Comande sua escuderia do pit wall ao título mundial
+                  </h1>
+                  <p className="text-slate-300 text-base leading-relaxed max-w-xl">
+                    Gerencie pilotos, contratos, diretoria, finanças, patrocinadores e desenvolvimento do carro.
+                    Simule GPs completos de forma automática e construa uma dinastia ao longo de várias temporadas.
+                  </p>
+                </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl pt-2">
-                {latestCareerSummary && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl pt-2">
+                  {latestCareerSummary && (
+                    <button
+                      onClick={handleContinue}
+                      className="sm:col-span-2 flex items-center justify-between gap-4 px-5 py-4 rounded-xl bg-[#E10600] hover:bg-[#c80500] text-white transition-colors text-left cursor-pointer"
+                    >
+                      <div className="min-w-0">
+                        <div className="text-xs font-medium text-white/80">
+                          Continuar carreira · Temporada {latestCareerSummary.currentSeason} · GP {Math.min(24, latestCareerSummary.currentRound)}/24
+                        </div>
+                        <div className="font-display font-bold text-lg truncate mt-0.5">
+                          {latestCareerSummary.teamName}
+                        </div>
+                      </div>
+                      <Play className="w-5 h-5 shrink-0 fill-current" />
+                    </button>
+                  )}
+
                   <button
-                    onClick={handleContinue}
-                    className="sm:col-span-2 flex items-center justify-between gap-4 px-5 py-4 rounded-xl bg-[#E10600] hover:bg-[#c80500] text-white transition-colors text-left cursor-pointer"
+                    onClick={() => setScreen('new_mode')}
+                    className="flex items-center justify-between gap-3 px-5 py-4 rounded-xl bg-[#141A24] hover:bg-[#1B2331] border border-white/10 text-white transition-colors text-left cursor-pointer"
                   >
-                    <div className="min-w-0">
-                      <div className="text-xs font-medium text-white/80">
-                        Continuar carreira · Temporada {latestCareerSummary.currentSeason} · GP {Math.min(24, latestCareerSummary.currentRound)}/24
-                      </div>
-                      <div className="font-display font-bold text-lg truncate mt-0.5">
-                        {latestCareerSummary.teamName}
-                      </div>
+                    <div>
+                      <div className="font-display font-semibold text-base">Novo Jogo</div>
+                      <div className="text-xs text-slate-400 mt-0.5">Assumir ou criar equipe</div>
                     </div>
-                    <Play className="w-5 h-5 shrink-0 fill-current" />
+                    <Plus className="w-5 h-5 text-slate-300 shrink-0" />
                   </button>
-                )}
 
-                <button
-                  onClick={() => setScreen('new_mode')}
-                  className="flex items-center justify-between gap-3 px-5 py-4 rounded-xl bg-[#141A24] hover:bg-[#1B2331] border border-white/10 text-white transition-colors text-left cursor-pointer"
-                >
-                  <div>
-                    <div className="font-display font-semibold text-base">Novo Jogo</div>
-                    <div className="text-xs text-slate-400 mt-0.5">Assumir ou criar equipe</div>
-                  </div>
-                  <Plus className="w-5 h-5 text-slate-300 shrink-0" />
-                </button>
-
-                <button
-                  onClick={() => {
-                    refreshSaved();
-                    setScreen('load');
-                  }}
-                  className="flex items-center justify-between gap-3 px-5 py-4 rounded-xl bg-[#141A24] hover:bg-[#1B2331] border border-white/10 text-white transition-colors text-left cursor-pointer"
-                >
-                  <div>
-                    <div className="font-display font-semibold text-base">Carregar Carreira</div>
-                    <div className="text-xs text-slate-400 mt-0.5">
-                      {savedList.length} {savedList.length === 1 ? 'carreira salva' : 'carreiras salvas'}
+                  <button
+                    onClick={() => {
+                      refreshSaved();
+                      setScreen('load');
+                    }}
+                    className="flex items-center justify-between gap-3 px-5 py-4 rounded-xl bg-[#141A24] hover:bg-[#1B2331] border border-white/10 text-white transition-colors text-left cursor-pointer"
+                  >
+                    <div>
+                      <div className="font-display font-semibold text-base">Carregar Carreira</div>
+                      <div className="text-xs text-slate-400 mt-0.5">
+                        {savedList.length} {savedList.length === 1 ? 'carreira salva' : 'carreiras salvas'}
+                      </div>
                     </div>
-                  </div>
-                  <FolderOpen className="w-5 h-5 text-slate-300 shrink-0" />
-                </button>
+                    <FolderOpen className="w-5 h-5 text-slate-300 shrink-0" />
+                  </button>
 
-                <button
-                  onClick={() => setScreen('settings')}
-                  className="sm:col-span-2 flex items-center justify-between gap-3 px-5 py-3.5 rounded-xl bg-[#11161F] hover:bg-[#171E2A] border border-white/10 text-slate-200 transition-colors text-left cursor-pointer"
+                  <button
+                    onClick={() => setScreen('settings')}
+                    className="sm:col-span-2 flex items-center justify-between gap-3 px-5 py-3.5 rounded-xl bg-[#11161F] hover:bg-[#171E2A] border border-white/10 text-slate-200 transition-colors text-left cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <SettingsIcon className="w-4 h-4 text-slate-400" />
+                      <span className="text-sm font-medium">Configurações da Simulação</span>
+                    </div>
+                    <span className="text-xs text-slate-400">
+                      {settings.difficulty === 'normal' ? 'Normal' : settings.difficulty === 'hard' ? 'Difícil' : 'Lendário'} · {settings.currency}
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="lg:col-span-5 bg-[#121722]/90 border border-white/10 rounded-2xl p-6 space-y-5 backdrop-blur-md">
+                <div className="text-xs font-medium text-slate-400">Prévia do Grid Oficial</div>
+                <F1CarLivery
+                  primaryColor="#DC0000"
+                  secondaryColor="#16181F"
+                  accentColor="#FFF200"
+                  pattern="classic"
+                  shortName="FER"
+                  carNumber={16}
+                  sponsorLabel="APEX GRID"
+                />
+                <div className="grid grid-cols-3 gap-3 pt-2 border-t border-white/10 text-center">
+                  <div>
+                    <div className="font-mono-tabular text-xl font-bold text-white">24</div>
+                    <div className="text-xs text-slate-400 mt-0.5">GPs Oficiais</div>
+                  </div>
+                  <div>
+                    <div className="font-mono-tabular text-xl font-bold text-white">10+</div>
+                    <div className="text-xs text-slate-400 mt-0.5">Equipes no Grid</div>
+                  </div>
+                  <div>
+                    <div className="font-mono-tabular text-xl font-bold text-white">∞</div>
+                    <div className="text-xs text-slate-400 mt-0.5">Temporadas</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Seção informativa para SEO e apresentação do simulador */}
+            <section
+              aria-labelledby="seo-overview-title"
+              className="border-t border-white/10 pt-10 space-y-6"
+            >
+              <div className="space-y-2.5 max-w-3xl">
+                <h2
+                  id="seo-overview-title"
+                  className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white"
                 >
-                  <div className="flex items-center gap-3">
-                    <SettingsIcon className="w-4 h-4 text-slate-400" />
-                    <span className="text-sm font-medium">Configurações da Simulação</span>
-                  </div>
-                  <span className="text-xs text-slate-400">
-                    {settings.difficulty === 'normal' ? 'Normal' : settings.difficulty === 'hard' ? 'Difícil' : 'Lendário'} · {settings.currency}
-                  </span>
-                </button>
+                  Apex Grid F1 Team Manager: Simulador de Gerenciamento de Fórmula 1
+                </h2>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  O Apex Grid é um jogo de Fórmula 1 gratuito para navegador no estilo F1 Manager, criado para quem
+                  gosta de gerenciamento de equipe de F1 com profundidade estratégica. Assuma uma escuderia oficial
+                  do grid ou funde sua própria equipe do zero para contratar pilotos, administrar finanças, negociar
+                  patrocínios, desenvolver carros competitivos e disputar temporadas completas em busca do título mundial.
+                </p>
               </div>
-            </div>
 
-            <div className="lg:col-span-5 bg-[#121722]/90 border border-white/10 rounded-2xl p-6 space-y-5 backdrop-blur-md">
-              <div className="text-xs font-medium text-slate-400">Prévia do Grid Oficial</div>
-              <F1CarLivery
-                primaryColor="#DC0000"
-                secondaryColor="#16181F"
-                accentColor="#FFF200"
-                pattern="classic"
-                shortName="FER"
-                carNumber={16}
-                sponsorLabel="APEX GRID"
-              />
-              <div className="grid grid-cols-3 gap-3 pt-2 border-t border-white/10 text-center">
-                <div>
-                  <div className="font-mono-tabular text-xl font-bold text-white">24</div>
-                  <div className="text-xs text-slate-400 mt-0.5">GPs Oficiais</div>
-                </div>
-                <div>
-                  <div className="font-mono-tabular text-xl font-bold text-white">10+</div>
-                  <div className="text-xs text-slate-400 mt-0.5">Equipes no Grid</div>
-                </div>
-                <div>
-                  <div className="font-mono-tabular text-xl font-bold text-white">∞</div>
-                  <div className="text-xs text-slate-400 mt-0.5">Temporadas</div>
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <article className="bg-[#121722]/85 border border-white/10 rounded-2xl p-5 space-y-2">
+                  <h3 className="font-display text-base font-bold text-white">
+                    Gerenciamento de equipes de Fórmula 1
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    No comando da sua escuderia, você cuida de cada área do gerenciamento de equipe de F1:
+                    orçamento, fluxo de caixa por Grande Prêmio, assinatura com patrocinadores, escolha de motor,
+                    contratação de staff técnico e reuniões com a diretoria para cumprir metas da temporada.
+                  </p>
+                </article>
+
+                <article className="bg-[#121722]/85 border border-white/10 rounded-2xl p-5 space-y-2">
+                  <h3 className="font-display text-base font-bold text-white">
+                    Contratação e desenvolvimento de pilotos
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    Monte sua dupla escolhendo os 2 pilotos titulares e reserva entre estrelas da F1, pilotos sem
+                    equipe e jovens talentos da Fórmula 2. Negocie salários, duração de contrato e multas no mercado
+                    enquanto acompanha a evolução de velocidade, consistência e experiência ao longo dos anos.
+                  </p>
+                </article>
+
+                <article className="bg-[#121722]/85 border border-white/10 rounded-2xl p-5 space-y-2">
+                  <h3 className="font-display text-base font-bold text-white">
+                    Desenvolvimento e evolução dos carros
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    Neste simulador de F1, o desempenho na pista depende do trabalho na fábrica. Inicie projetos de
+                    atualização para motor, aerodinâmica, chassi, suspensão, freios e confiabilidade, além de expandir
+                    fábrica, túnel de vento e simulador enquanto as equipes rivais também evoluem.
+                  </p>
+                </article>
+
+                <article className="bg-[#121722]/85 border border-white/10 rounded-2xl p-5 space-y-2">
+                  <h3 className="font-display text-base font-bold text-white">
+                    Estratégias, corridas e campeonatos
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    Planeje investimentos e decisões para encarar um calendário oficial de 24 Grandes Prêmios com
+                    classificação e simulação automática de corrida. Acompanhe o campeonato de pilotos e construtores,
+                    eventos aleatórios do paddock e o histórico completo da sua carreira em um jogo de Fórmula 1 contínuo.
+                  </p>
+                </article>
               </div>
-            </div>
+            </section>
           </div>
         )}
 
